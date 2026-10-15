@@ -1,5 +1,6 @@
 $(document).ready(function() {
     var selectedDate; // Variável para armazenar a data selecionada
+    var occupiedSlots = [];
     var appointments = []; // Array para armazenar os agendamentos
 
     // Initialize the calendar
@@ -18,15 +19,29 @@ $(document).ready(function() {
         }
     });
 
-    // Manipule o clique no botão "Agendar"
-    $('#bookAppointment').on('click', function() {
-        if (!selectedDate) {
-            alert('Selecione uma data no calendário.');
-            return;
-        }
+$('#bookAppointment').on('click', function() {
+    if (!selectedDate) {
+        alert('Selecione uma data no calendário.');
+        return;
+    }
 
-        var selectedTime = $('#timeslot').val();
-        var appointment = 'Data: ' + selectedDate + ' Hora: ' + selectedTime;
+    var clientName = $('#clientName').val().trim();
+
+    if (clientName === '') {
+        alert('Digite seu nome para agendar.');
+        return;
+    }
+
+    var selectedTime = $('#timeslot').val();
+    var slot = selectedDate + '|' + selectedTime;
+
+if (occupiedSlots.includes(slot)) {
+    alert('Este horário já foi agendado. Escolha outro.');
+    return;
+}
+
+occupiedSlots.push(slot);
+    var appointment = 'Nome: ' + clientName + ' | Data: ' + selectedDate + ' | Hora: ' + selectedTime;
 
         // Adicione o agendamento ao array de agendamentos
         appointments.push(appointment);
